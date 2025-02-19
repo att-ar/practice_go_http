@@ -1,19 +1,21 @@
-server:
-	cd cmd/server && go build
+SERVER_BINARY = ./bin/server
+CLIENT_BINARY = ./bin/client
 
-client:
-	cd cmd/client && go build
+build-server:
+	go build -o $(SERVER_BINARY) ./cmd/server/main.go
+
+build-client:
+	go build -o $(CLIENT_BINARY) ./cmd/client/main.go
 
 run-server:
-	cd cmd/server && ./server
+	$(SERVER_BINARY)
 
 run-client:
-	cd cmd/client && ./client -server-address localhost:8080
+	$(CLIENT_BINARY) -server-address localhost:8080
 
-build-run-server:
-	make server && ./server
+build-run-server: build-server run-server
 
-build-run-client:
-	make client && ./client -server-address localhost:8080
+build-run-client: build-client run-client
 
-.PHONY: server client run-server run-client # Prevents issues if files with these names exist
+# Prevents issues if files with these names exist
+.PHONY: build-server build-client run-server run-client build-run-server build-run-client
