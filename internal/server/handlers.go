@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"practice_http/cmd/common"
+	"practice_http/internal/common"
 
 	"github.com/gorilla/mux"
 )
@@ -31,6 +31,7 @@ func handlePostPokemon(rw http.ResponseWriter, req *http.Request) {
 
 	// Loop through the pokemons now that they're at the top level of the decoder
 	var pokemon common.Pokemon
+	count := 0
 	for decoder.More() {
 		err := decoder.Decode(&pokemon)
 		if err != nil {
@@ -40,6 +41,7 @@ func handlePostPokemon(rw http.ResponseWriter, req *http.Request) {
 		}
 
 		log.Printf("Pokemon received: %+v\n", pokemon) // "store" the pokemon lol
+		count += 1
 	}
 
 	if _, err := decoder.Token(); err != nil { // Check for the end of the array
@@ -47,5 +49,5 @@ func handlePostPokemon(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Fprintln(rw, "Pokemons processed") // Success message back to client
+	fmt.Fprintf(rw, "%d Pokemons processed\n", count) // Success message back to client
 }
