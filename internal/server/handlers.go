@@ -13,14 +13,46 @@ import (
 func newHandler() http.Handler {
 	router := mux.NewRouter()
 
-	// pokemon
+	// /
+	router.HandleFunc("/", handleHandshake).Methods("GET", "POST")
+
+	// /pokemon
 	router.HandleFunc("/pokemon", handlePostPokemon).Methods("POST")
+
+	// /pokemon/list
+	router.HandleFunc("/pokemon/list", handlePostPokemonList).Methods("POST")
 
 	return router
 }
 
-/* Print the data of Pokemons that are posted to this endpoint */
+/* Establish handshake */
+func handleHandshake(rw http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
+	fmt.Fprintf(rw, "Handshake Successful\n") // Success message back to client
+}
+
+/* Print the data of Pokemons posted to this endpoint */
 func handlePostPokemon(rw http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
+	decoder := json.NewDecoder(req.Body)
+
+	var pokemon common.Pokemon
+	for decoder.More() {
+		err := decoder.Decode(&pokemon)
+		if err != nil {
+			log.Printf("Decoding Error: %v\n", err)            // log the error to the server console
+			http.Error(rw, err.Error(), http.StatusBadRequest) // send 400 back to client
+			return
+		}
+
+		log.Printf("Pokemon received: %+v\n", pokemon) // "store" the pokemon lol
+	}
+	fmt.Fprintf(rw, "Pokemon processed\n") // Success message back to client
+}
+
+/* Print the data of Pokemons that are in a list posted to this endpoint */
+func handlePostPokemonList(rw http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
 	decoder := json.NewDecoder(req.Body)
 
 	// Attempt to decode as an array of Pokemons

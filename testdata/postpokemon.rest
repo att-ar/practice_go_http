@@ -1,13 +1,11 @@
 POST http://localhost:8080/pokemon
 Content-Type: application/json
 
-[
-    {
-        "Name": "Charizard",
-        "Type": ["Fire"]
-    },
-    {
-        "Name": "Piplup",
-        "Type": ["Water", "Air"]
-    }
-]
+{
+    "Name": "Charizard",
+    "Type": ["Fire"]
+}
+{
+    "Name": "Piplup",
+    "Type": ["Water", "Air"]
+}

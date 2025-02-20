@@ -12,6 +12,6 @@ type PokemonJSON struct {
 
 // Pokemon is a struct to hold the data we care about
 type Pokemon struct {
-	Name string
-	Type []string
+	Name string   `json:"name"`
+	Type []string `json:"type"`
 }

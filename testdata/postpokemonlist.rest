@@ -1,0 +1,13 @@
+POST http://localhost:8080/pokemon/list
+Content-Type: application/json
+
+[
+    {
+        "Name": "charizard",
+        "Type": ["Fire"]
+    },
+    {
+        "Name": "piplup",
+        "Type": ["Water", "Air"]
+    }
+]
